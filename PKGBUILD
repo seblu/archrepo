@@ -17,8 +17,8 @@ package() {
   # install config
   install -m644 pacman-seblu.conf "$pkgdir/usr/share/devtools"
   # install binaries
-  install -m755 seblu-build seblu-repo-add seblu-build-commit seblu-update \
-    seblu-commit seblu-remove seblu-cleanup seblu-list "$pkgdir/usr/bin"
+  install -m755 seblu-build seblu-build-commit seblu-update seblu-commit \
+    seblu-remove seblu-cleanup seblu-list "$pkgdir/usr/bin"
   # symlink archbuild
   ln -s archbuild $pkgdir/usr/bin/seblu-i686-build
   ln -s archbuild $pkgdir/usr/bin/seblu-x86_64-build
