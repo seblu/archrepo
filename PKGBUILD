@@ -1,17 +1,13 @@
 # Maintainer: Sébastien Luttringer
 
 pkgname=archrepo-git
-pkgver=1
+pkgver=$(date +%Y.%m.%d)
 pkgrel=1
 pkgdesc='Seblu Archlinux Repositories Stuff'
 arch=('any')
 url='https://github.com/seblu/archutils'
 license=('GPL2')
 depends=('bash' 'devtools')
-
-#pkgver() {
-#  git log -1 --pretty=format:%h
-#}
 
 package() {
   cd "$startdir"
