@@ -54,22 +54,30 @@ sign() {
 declare -a to_32 to_64
 
 for _pkgname in "${pkgname[@]}"; do
+	# define filename base
+	# handle epoch which is optional
+	filebase="$_pkgname-"
+	[[ -n $epoch ]] && (( $epoch > 0 )) && filebase+="$epoch:"
+	filebase+="$pkgver-$pkgrel"
+
 	# add any pkg in both repo
-	filename="$_pkgname-$pkgver-$pkgrel-any$PKGEXT"
+	filename="$filebase-any$PKGEXT"
 	if [[ -f "$filename" ]]; then
 		[[ -f "$filename.sig" ]] || sign "$filename"
 		# register
 		to_32+=("$filename")
 		to_64+=("$filename")
 	fi
+
 	# add i686 repo
-	filename="$_pkgname-$pkgver-$pkgrel-i686$PKGEXT"
+	filename="$filebase-i686$PKGEXT"
 	if [[ -f "$filename" ]]; then
 		[[ -f "$filename.sig" ]] || sign "$filename"
 		to_32+=("$filename")
 	fi
+
 	# add x86_64 repo
-	filename="$_pkgname-$pkgver-$pkgrel-x86_64$PKGEXT"
+	filename="$filebase-x86_64$PKGEXT"
 	if [[ -f "$filename" ]]; then
 		[[ -f "$filename.sig" ]] || sign "$filename"
 		to_64+=("$filename")
