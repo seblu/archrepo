@@ -20,8 +20,12 @@ package() {
   install -m755 seblu-build seblu-build-commit seblu-update seblu-commit \
     seblu-remove seblu-cleanup seblu-list "$pkgdir/usr/bin"
   # symlink archbuild
-  ln -s archbuild $pkgdir/usr/bin/seblu-i686-build
-  ln -s archbuild $pkgdir/usr/bin/seblu-x86_64-build
+  ln -s archbuild "$pkgdir/usr/bin/seblu-i686-build"
+  ln -s archbuild "$pkgdir/usr/bin/seblu-x86_64-build"
+  # symlink to seblu-build
+  ln -s seblu-build "$pkgdir/usr/bin/extra-build"
+  ln -s seblu-build "$pkgdir/usr/bin/testing-build"
+  ln -s seblu-build "$pkgdir/usr/bin/staging-build"
 }
 
 # vim:set ts=2 sw=2 et:
