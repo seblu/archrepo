@@ -5,7 +5,7 @@ pkgver=$(date +%Y.%m.%d)
 pkgrel=1
 pkgdesc='Seblu Archlinux Repositories Stuff'
 arch=('any')
-url='https://github.com/seblu/archutils'
+url='https://github.com/seblu/archrepo'
 license=('GPL2')
 depends=('bash' 'devtools')
 
