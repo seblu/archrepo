@@ -52,6 +52,14 @@ sign() {
 	gpg --detach-sign "$1" || exit 1
 }
 
+# $1: srouce
+# $2: destination
+cp_acl() {
+	rm -f "$2"
+	touch "$2"
+	cat < "$1" > "$2"
+}
+
 # commit
 declare -a to_32 to_64
 
@@ -90,8 +98,8 @@ if ((${#to_32[@]} > 0)); then
 	msg "Adding into $dbname i686 dir"
 	# copy new
 	for _i in "${to_32[@]}"; do
-		cp -vf "$_i" "$repo_32" || exit 2
-		cp -vf "$_i.sig" "$repo_32" || exit 2
+		cp_acl "$_i" "$repo_32/$_i" || exit 2
+		cp_acl "$_i.sig" "$repo_32/$_i.sig" || exit 2
 	done
 	pushd "$repo_32" >/dev/null
 	# update db
@@ -107,8 +115,8 @@ if ((${#to_64[@]} > 0)); then
 	msg "Adding into $dbname x86_64 dir"
 	# copy new
 	for _i in "${to_64[@]}"; do
-		cp -vf "$_i" "$repo_64" || exit 2
-		cp -vf "$_i.sig" "$repo_64" || exit 2
+		cp_acl "$_i" "$repo_64/$_i" || exit 2
+		cp_acl "$_i.sig" "$repo_64/$_i.sig" || exit 2
 	done
 	pushd "$repo_64" >/dev/null
 	# update db
