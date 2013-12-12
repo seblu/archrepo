@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 dbname='seblu'
-repo="/srv/http/archlinux/$dbname"
+repo="/srv/ftp/archlinux/$dbname"
 repo_32="$repo/i686"
 repo_64="$repo/x86_64"
 

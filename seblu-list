@@ -19,7 +19,7 @@
 shopt -s xpg_echo
 
 db='seblu.db.tar.gz'
-repo='/srv/http/archlinux/seblu'
+repo='/srv/ftp/archlinux/seblu'
 
 # source makepkg config
 . /etc/makepkg.conf
