@@ -26,6 +26,8 @@ repo_64="$repo/x86_64"
 source /etc/makepkg.conf
 source PKGBUILD
 
+[[ $(type -t pkgver) == 'function' ]] && pkgver=$(pkgver)
+
 shopt -s nullglob
 
 msg() {
