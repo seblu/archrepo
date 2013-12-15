@@ -107,12 +107,13 @@ add_pkg() {
 	(( $# > 1 )) || return
 	local repo="$1"
 	shift
-	msg "Adding packages into $1"
+	msg "Adding packages into $repo"
 	# copy files
 	for _pkg; do
 		msg2 "Copying $_pkg"
 		cp_acl "$_pkg" "$repo/$_pkg" || exit 2
 		cp_acl "$_pkg.sig" "$repo/$_pkg.sig" || exit 2
+		rm "$_pkg" "$_pkg.sig"
 	done
 	# update db
 	pushd "$repo" >/dev/null
