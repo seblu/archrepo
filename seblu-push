@@ -1,0 +1,115 @@
+#!/bin/bash
+
+# Copyright © Sébastien Luttringer
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+repourl='archlinux@white.seblu.net'
+repodir='incoming'
+
+[[ -r /etc/makepkg.conf ]] && source /etc/makepkg.conf
+[[ -r "$HOME/.makepkg.conf" ]]  && source "$HOME/.makepkg.conf"
+
+shopt -s nullglob
+
+msg() {
+	printf "\e[1;32m==>\e[0;1m $1\e[m\n" "${@:1}"
+}
+
+msg2() {
+	printf "\e[1;34m  ->\e[0;1m $1\e[m\n" "${@:1}"
+}
+
+# usage : in_array( $needle, $haystack )
+# return : 0 - found
+#          1 - not found
+in_array() {
+	local needle=$1; shift
+	local item
+	for item in "$@"; do
+	   [[ $item = $needle ]] && return 0 # Found
+	done
+	return 1 # Not Found
+}
+
+source_pkgbuild() {
+	[[ ! -f PKGBUILD ]] && echo 'No PKGBUILD' && exit 1
+	source PKGBUILD
+
+	[[ $(type -t pkgver) == 'function' ]] && pkgver=$(pkgver)
+
+	for _pkgname in "${pkgname[@]}"; do
+		# define filename base
+		# handle epoch which is optional
+		filebase="$_pkgname-"
+		[[ -n $epoch ]] && (( $epoch > 0 )) && filebase+="$epoch:"
+		filebase+="$pkgver-$pkgrel"
+
+		# add any pkg in both repo
+		filename="$filebase-any$PKGEXT"
+		if [[ -f "$filename" ]]; then
+			# register
+			to_32+=("$filename")
+			to_64+=("$filename")
+		fi
+
+		# add i686 repo
+		filename="$filebase-i686$PKGEXT"
+		if [[ -f "$filename" ]]; then
+			to_32+=("$filename")
+		fi
+
+		# add x86_64 repo
+		filename="$filebase-x86_64$PKGEXT"
+		if [[ -f "$filename" ]]; then
+			to_64+=("$filename")
+		fi
+	done
+}
+
+# push package to remote repository
+push_pkg() {
+	(( $# > 0 )) || return
+	msg "Pushing packages into $repourl"
+	# copy files
+	for _pkg; do
+		msg2 "Copying $_pkg"
+		scp -p "$_pkg" "$repourl:$repodir" || exit 2
+	done
+}
+
+# if packages are on command line add them, otherwise look in PKGBUILD
+if (( $# > 0 )); then
+	for _pkg; do
+		case "$_pkg" in
+			*-i686$PKGEXT) to_32+=("$_pkg");;
+			*-x86_64$PKGEXT) to_64+=("$_pkg");;
+			*-any$PKGEXT) to_32+=("$_pkg"); to_64+=("$_pkg");;
+		esac
+	done
+else
+	source_pkgbuild
+fi
+
+if (( ${#to_32[@]} + ${#to_64[@]} == 0 )); then
+	echo 'No package to add' >&2
+	exit 2
+fi
+
+push_pkg "${to_32[@]}" "${to_64[@]}"
+
+ssh "$repourl" "cd $repodir && seblu-commit" "${to_32[@]}" "${to_64[@]}"
+
+# vim:set ts=2 sw=2 ft=sh noet:
