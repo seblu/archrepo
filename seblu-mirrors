@@ -16,4 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
+# ask mirrors to sync
+
 ssh -p 2222 -l archlinux achille.seblu.net \~/sync_seblu_repo
