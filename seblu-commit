@@ -29,6 +29,13 @@ declare -a to_32 to_64
 
 shopt -s nullglob
 
+usage() {
+	echo "usage: ${0##*/} [options] pkg ..." >&2
+	echo 'options:' >&2
+	echo "   -r: remove package after addition" >&2
+	exit 2
+}
+
 msg() {
 	printf "\e[1;32m==>\e[0;1m $1\e[m\n" "${@:1}"
 }
@@ -57,41 +64,6 @@ cp_acl() {
 	cat < "$1" > "$2"
 }
 
-source_pkgbuild() {
-	[[ ! -f PKGBUILD ]] && echo 'No PKGBUILD' && exit 1
-	source PKGBUILD
-
-	[[ $(type -t pkgver) == 'function' ]] && pkgver=$(pkgver)
-
-	for _pkgname in "${pkgname[@]}"; do
-		# define filename base
-		# handle epoch which is optional
-		filebase="$_pkgname-"
-		[[ -n $epoch ]] && (( $epoch > 0 )) && filebase+="$epoch:"
-		filebase+="$pkgver-$pkgrel"
-
-		# add any pkg in both repo
-		filename="$filebase-any$PKGEXT"
-		if [[ -f "$filename" ]]; then
-			# register
-			to_32+=("$filename")
-			to_64+=("$filename")
-		fi
-
-		# add i686 repo
-		filename="$filebase-i686$PKGEXT"
-		if [[ -f "$filename" ]]; then
-			to_32+=("$filename")
-		fi
-
-		# add x86_64 repo
-		filename="$filebase-x86_64$PKGEXT"
-		if [[ -f "$filename" ]]; then
-			to_64+=("$filename")
-		fi
-	done
-}
-
 sign_pkg() {
 	msg 'Sign packages'
 	for _pkg; do
@@ -113,16 +85,25 @@ add_pkg() {
 		msg2 "Copying $_pkg"
 		cp_acl "$_pkg" "$repo/$_pkg" || exit 2
 		cp_acl "$_pkg.sig" "$repo/$_pkg.sig" || exit 2
-		rm "$_pkg" "$_pkg.sig"
 	done
 	# update db
 	pushd "$repo" >/dev/null
-	msg2 "Updating $repo db"
+	msg2 "Updating $dbname.db.tar.gz"
 	repo-add -q -s "$dbname.db.tar.gz" "$@"
-	msg2 "Updating $repo file db"
+	msg2 "Updating $dbname.files.tar.gz"
 	repo-add -q -s -f "$dbname.files.tar.gz" "$@"
 	popd >/dev/null
 }
+
+while getopts 'hr' opt; do
+	case $opt in
+		r) remove=1;;
+		*) usage;;
+	esac
+done
+shift $((OPTIND - 1));
+
+(( $# >= 1 )) || usage
 
 # if packages are on command line add them, otherwise look in PKGBUILD
 if (( $# > 0 )); then
@@ -149,5 +130,10 @@ add_pkg "$repo_32" "${to_32[@]}"
 
 # add x86_64 packages
 add_pkg "$repo_64" "${to_64[@]}"
+
+# delete packages
+for _pkg in "${to_32[@]}" "${to_64[@]}"; do
+	rm -f "$_pkg" "$_pkg.sig"
+done
 
 # vim:set ts=2 sw=2 ft=sh noet:

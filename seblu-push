@@ -24,6 +24,8 @@ repodir='incoming'
 
 shopt -s nullglob
 
+declare -a to_commit
+
 msg() {
 	printf "\e[1;32m==>\e[0;1m $1\e[m\n" "${@:1}"
 }
@@ -58,24 +60,10 @@ source_pkgbuild() {
 		filebase+="$pkgver-$pkgrel"
 
 		# add any pkg in both repo
-		filename="$filebase-any$PKGEXT"
-		if [[ -f "$filename" ]]; then
-			# register
-			to_32+=("$filename")
-			to_64+=("$filename")
-		fi
-
-		# add i686 repo
-		filename="$filebase-i686$PKGEXT"
-		if [[ -f "$filename" ]]; then
-			to_32+=("$filename")
-		fi
-
-		# add x86_64 repo
-		filename="$filebase-x86_64$PKGEXT"
-		if [[ -f "$filename" ]]; then
-			to_64+=("$filename")
-		fi
+		for _arch in "${arch[@]}"; do
+			filename="$filebase-$_arch$PKGEXT" 
+			[[ -f "$filename" ]] && to_commit+=("$filename")
+		done
 	done
 }
 
@@ -94,22 +82,22 @@ push_pkg() {
 if (( $# > 0 )); then
 	for _pkg; do
 		case "$_pkg" in
-			*-i686$PKGEXT) to_32+=("$_pkg");;
-			*-x86_64$PKGEXT) to_64+=("$_pkg");;
-			*-any$PKGEXT) to_32+=("$_pkg"); to_64+=("$_pkg");;
+			*-i686$PKGEXT) to_commit+=("$_pkg");;
+			*-x86_64$PKGEXT) to_commit+=("$_pkg");;
+			*-any$PKGEXT) to_commit+=("$_pkg");;
 		esac
 	done
 else
 	source_pkgbuild
 fi
 
-if (( ${#to_32[@]} + ${#to_64[@]} == 0 )); then
+if (( ${#to_commit[@]} == 0 )); then
 	echo 'No package to add' >&2
 	exit 2
 fi
 
-push_pkg "${to_32[@]}" "${to_64[@]}"
+push_pkg "${to_commit[@]}"
 
-ssh "$repourl" "cd $repodir && seblu-commit" "${to_32[@]}" "${to_64[@]}"
+ssh "$repourl" -- "cd $repodir && seblu-commit" '-r' "${to_commit[@]}"
 
 # vim:set ts=2 sw=2 ft=sh noet:
