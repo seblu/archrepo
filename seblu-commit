@@ -131,4 +131,9 @@ for _pkg in "${to_32[@]}" "${to_64[@]}"; do
 	rm -f "$_pkg" "$_pkg.sig"
 done
 
+# harlinking
+if type -P hardlink >/dev/null; then
+	hardlink -c "$repo" >/dev/null
+fi
+
 # vim:set ts=2 sw=2 ft=sh noet:

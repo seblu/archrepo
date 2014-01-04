@@ -7,7 +7,7 @@ pkgdesc='Seblu Archlinux Repositories Stuff'
 arch=('any')
 url='https://github.com/seblu/archrepo'
 license=('GPL2')
-depends=('bash' 'devtools')
+depends=('bash' 'devtools' 'hardlink')
 
 package() {
   cd "$startdir"

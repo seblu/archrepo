@@ -59,7 +59,6 @@ source_pkgbuild() {
 		[[ -n $epoch ]] && (( $epoch > 0 )) && filebase+="$epoch:"
 		filebase+="$pkgver-$pkgrel"
 
-		# add any pkg in both repo
 		for _arch in "${arch[@]}"; do
 			filename="$filebase-$_arch$PKGEXT" 
 			[[ -f "$filename" ]] && to_commit+=("$filename")
