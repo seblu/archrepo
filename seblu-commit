@@ -105,18 +105,13 @@ shift $((OPTIND - 1));
 
 (( $# >= 1 )) || usage
 
-# if packages are on command line add them, otherwise look in PKGBUILD
-if (( $# > 0 )); then
-	for _pkg; do
-		case "$_pkg" in
-			*-i686$PKGEXT) to_32+=("$_pkg");;
-			*-x86_64$PKGEXT) to_64+=("$_pkg");;
-			*-any$PKGEXT) to_32+=("$_pkg"); to_64+=("$_pkg");;
-		esac
-	done
-else
-	source_pkgbuild
-fi
+for _pkg; do
+	case "$_pkg" in
+		*-i686$PKGEXT) to_32+=("$_pkg");;
+		*-x86_64$PKGEXT) to_64+=("$_pkg");;
+		*-any$PKGEXT) to_32+=("$_pkg"); to_64+=("$_pkg");;
+	esac
+done
 
 if (( ${#to_32[@]} + ${#to_64[@]} == 0 )); then
 	echo 'No package to add' >&2
