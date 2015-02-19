@@ -16,6 +16,7 @@ package() {
   install -m644 COPYRIGHT LICENSE "$pkgdir/usr/share/licenses/$pkgname"
   # install config
   install -m644 pacman-seblu.conf "$pkgdir/usr/share/devtools"
+  install -m644 pacman-multilib-seblu.conf "$pkgdir/usr/share/devtools"
   # install binaries
   install -m755 seblu-build seblu-build-commit seblu-mirrors seblu-commit \
     seblu-remove seblu-cleanup seblu-list seblu-push update-arch-chroots \
@@ -23,6 +24,7 @@ package() {
   # symlink archbuild
   ln -s archbuild "$pkgdir/usr/bin/seblu-i686-build"
   ln -s archbuild "$pkgdir/usr/bin/seblu-x86_64-build"
+  ln -s archbuild "$pkgdir/usr/bin/multilib-seblu-build"
   # symlink to seblu-build
   ln -s seblu-build "$pkgdir/usr/bin/extra-build"
   ln -s seblu-build "$pkgdir/usr/bin/testing-build"

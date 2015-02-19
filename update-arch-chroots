@@ -22,7 +22,7 @@
 
 cd /var/empty
 
-for rep in {extra,testing,staging,seblu}-{i686,x86_64} multilib{,-testing,-staging}; do
+for rep in {extra,testing,staging,seblu}-{i686,x86_64} multilib{,-seblu,-testing,-staging}; do
 	type -p $rep-build >/dev/null && $rep-build -c &>/dev/null
 done
 
