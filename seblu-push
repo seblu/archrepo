@@ -90,6 +90,12 @@ else
 	source_pkgbuild
 fi
 
+# if nothing to do, try to push current directory pakages
+if (( ${#to_commit[@]} == 0 )); then
+	to_commit=(*$PKGEXT)
+fi
+
+# exit early when no job
 if (( ${#to_commit[@]} == 0 )); then
 	echo 'No package to add' >&2
 	exit 2
