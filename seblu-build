@@ -40,14 +40,14 @@ in_array() {
 	return 1 # Not Found
 }
 
-# arch x86 and any builds
-if in_array 'i686' "${arch[@]}"; then
-	$repo-i686-build "$@" || exit 1
-fi
-
 # arch amd64 build
 if in_array 'x86_64' "${arch[@]}" || in_array 'any' "${arch[@]}"; then
 	$repo-x86_64-build "$@" || exit 1
+fi
+
+# arch x86 and any builds
+if in_array 'i686' "${arch[@]}"; then
+	$repo-i686-build "$@" || exit 1
 fi
 
 # vim:set ts=2 sw=2 ft=sh noet ai:
