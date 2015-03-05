@@ -73,7 +73,7 @@ push_pkg() {
 	# copy files
 	for _pkg; do
 		msg2 "Copying $_pkg"
-		scp -p "$_pkg" "$repourl:$repodir" || exit 2
+		scp -p "./$_pkg" "$repourl:$repodir" || exit 2
 	done
 }
 
