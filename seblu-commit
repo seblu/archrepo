@@ -29,19 +29,26 @@ declare -a to_32 to_64
 
 shopt -s nullglob
 
+if [[ -t 0 && -t 2 ]]; then
+	GREEN='1;32m'
+	BLUE='1;34m'
+	BOLD='0;1m'
+	RESET='m'
+fi
+
+msg() {
+	printf "$GREEN==>$BOLD $1$RESET\n" "${@:1}"
+}
+
+msg2() {
+	printf "$BLUE  ->$BOLD $1$RESET\n" "${@:1}"
+}
+
 usage() {
 	echo "usage: ${0##*/} [options] pkg ..." >&2
 	echo 'options:' >&2
 	echo "   -r: remove package after addition" >&2
 	exit 2
-}
-
-msg() {
-	printf "\e[1;32m==>\e[0;1m $1\e[m\n" "${@:1}"
-}
-
-msg2() {
-	printf "\e[1;34m  ->\e[0;1m $1\e[m\n" "${@:1}"
 }
 
 # usage : in_array( $needle, $haystack )
