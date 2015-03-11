@@ -30,10 +30,11 @@ declare -a to_32 to_64
 shopt -s nullglob
 
 if [[ -t 0 && -t 2 ]]; then
-	GREEN='1;32m'
-	BLUE='1;34m'
-	BOLD='0;1m'
-	RESET='m'
+	RED=$'\e''[1;31m'
+	GREEN=$'\e''[1;32m'
+	BLUE=$'\e''[1;34m'
+	BOLD=$'\e''[0;1m'
+	RESET=$'\e''[m'
 fi
 
 msg() {
