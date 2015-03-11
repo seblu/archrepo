@@ -1,7 +1,8 @@
 # Maintainer: Sébastien Luttringer
 
 pkgname=archrepo-git
-pkgver=$(date +%Y.%m.%d)
+pkgver=$(git log --pretty=format:''|wc -l)
+#pkgver=$(date +%Y.%m.%d)
 pkgrel=1
 pkgdesc='Seblu Archlinux Repositories Stuff'
 arch=('any')
