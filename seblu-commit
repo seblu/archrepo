@@ -98,8 +98,6 @@ add_pkg() {
 	pushd "$repo" >/dev/null
 	msg2 "Updating $dbname.db.tar.gz"
 	repo-add -q -s "$dbname.db.tar.gz" "$@"
-	msg2 "Updating $dbname.files.tar.gz"
-	repo-add -q -s -f "$dbname.files.tar.gz" "$@"
 	popd >/dev/null
 }
 
