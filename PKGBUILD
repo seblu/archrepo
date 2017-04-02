@@ -8,6 +8,7 @@ pkgdesc='Seblu Archlinux Repositories Stuff'
 arch=('any')
 url='https://github.com/seblu/archrepo'
 license=('GPL2')
+makedepends=('git')
 depends=('bash' 'devtools' 'hardlink')
 
 package() {
