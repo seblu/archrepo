@@ -89,7 +89,6 @@ push_pkg() {
 if (( $# > 0 )); then
 	for _pkg; do
 		case "$_pkg" in
-			*-i686$PKGEXT) to_commit+=("$_pkg");;
 			*-x86_64$PKGEXT) to_commit+=("$_pkg");;
 			*-any$PKGEXT) to_commit+=("$_pkg");;
 		esac

@@ -18,7 +18,6 @@
 
 dbname='seblu'
 repo="/srv/ftp/archlinux/$dbname"
-repo_32="$repo/i686"
 repo_64="$repo/x86_64"
 
 # packages to add
@@ -113,9 +112,8 @@ shift $((OPTIND - 1));
 
 for _pkg; do
 	case "$_pkg" in
-		*-i686$PKGEXT) to_32+=("$_pkg");;
 		*-x86_64$PKGEXT) to_64+=("$_pkg");;
-		*-any$PKGEXT) to_32+=("$_pkg"); to_64+=("$_pkg");;
+		*-any$PKGEXT) to_64+=("$_pkg");;
 	esac
 done
 
@@ -125,9 +123,6 @@ if (( ${#to_32[@]} + ${#to_64[@]} == 0 )); then
 fi
 
 sign_pkg "${to_32[@]}" "${to_64[@]}"
-
-# add i686 packages
-add_pkg "$repo_32" "${to_32[@]}"
 
 # add x86_64 packages
 add_pkg "$repo_64" "${to_64[@]}"
