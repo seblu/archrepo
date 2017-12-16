@@ -20,7 +20,10 @@
 
 [[ -t 1 ]] && set -x
 
-cd /var/empty
+tmpdir="$(mktemp -d)"
+trap 0 rm -rf "$tmpdir"
+
+cd "$tmpdir"
 
 for rep in {extra,testing,staging,seblu}-x86_64 multilib{,-seblu,-testing,-staging}; do
 	type -p $rep-build >/dev/null && $rep-build -c &>/dev/null
