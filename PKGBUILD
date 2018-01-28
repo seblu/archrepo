@@ -30,6 +30,9 @@ package() {
   ln -s seblu-build "$pkgdir/usr/bin/extra-build"
   ln -s seblu-build "$pkgdir/usr/bin/testing-build"
   ln -s seblu-build "$pkgdir/usr/bin/staging-build"
+  # add sudo config
+  install -dm750 "$pkgdir/etc/sudoers.d"
+  install -m644 sudoers "$pkgdir/etc/sudoers.d/50-devtools-seblu"
 }
 
 # vim:set ts=2 sw=2 et:

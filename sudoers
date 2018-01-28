@@ -1,0 +1,5 @@
+Cmnd_Alias SEBLU_DEVTOOLS = /usr/bin/seblu-x86_64-build, /usr/bin/multilib-seblu-build, /usr/bin/seblu-build
+
+Defaults!SEBLU_DEVTOOLS umask_override
+
+%devtools ALL=(root) NOPASSWD: SEBLU_DEVTOOLS
