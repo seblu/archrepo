@@ -17,7 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 db='seblu.db.tar.gz'
-repo='/srv/ftp/archlinux/seblu'
+repo='/home/archlinux/repo/seblu'
 arch=('x86_64')
 
 # source makepkg config
