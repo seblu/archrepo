@@ -81,7 +81,7 @@ push_pkg() {
 	# copy files
 	for _pkg; do
 		msg2 "Copying $_pkg"
-		scp -p "./$_pkg" "$repourl:$repodir" || exit 2
+		scp -p "./$_pkg" "scp://$repourl/$repodir" || exit 2
 	done
 }
 
@@ -110,6 +110,6 @@ fi
 
 push_pkg "${to_commit[@]}"
 
-ssh "$repourl" -- "cd $repodir && seblu-commit" '-r' "${to_commit[@]}"
+ssh "ssh://$repourl" -- "cd $repodir && seblu-commit" '-r' "${to_commit[@]}"
 
 # vim:set ts=2 sw=2 ft=sh noet:
