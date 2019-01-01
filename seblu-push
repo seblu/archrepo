@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-repourl=${REPO_URL:-archlinux@white.h.seblu.net:2222}
+repourl=${REPO_URL:-archlinux@white.v.seblu.net:2222}
 repodir=${REPO_DIR:-incoming}
 
 [[ -r /etc/makepkg.conf ]] && source /etc/makepkg.conf
