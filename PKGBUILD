@@ -20,8 +20,8 @@ package() {
   install -m644 pacman-seblu.conf "$pkgdir/usr/share/devtools"
   install -m644 pacman-multilib-seblu.conf "$pkgdir/usr/share/devtools"
   # install binaries
-  install -m755 seblu-build seblu-build-commit seblu-mirrors seblu-commit \
-    seblu-remove seblu-cleanup seblu-push update-arch-chroots \
+  install -m755 seblu-build seblu-build-commit seblu-commit seblu-remove \
+    seblu-cleanup seblu-push update-arch-chroots \
     "$pkgdir/usr/bin"
   # symlink archbuild
   ln -s archbuild "$pkgdir/usr/bin/seblu-x86_64-build"
