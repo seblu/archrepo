@@ -2,8 +2,7 @@
 
 pkgname=archrepo-git
 pkgver=$(git log --pretty=format:''|wc -l)
-#pkgver=$(date +%Y.%m.%d)
-pkgrel=1
+pkgrel=$(date +%y%m%d%H%M)
 pkgdesc='Seblu Archlinux Repositories Stuff'
 arch=('any')
 url='https://github.com/seblu/archrepo'
