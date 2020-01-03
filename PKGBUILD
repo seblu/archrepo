@@ -3,9 +3,9 @@
 pkgname=archrepo-git
 pkgver=$(git rev-list --count master)
 pkgrel=$(date +%y%m%d%H%M)
-pkgdesc='Seblu Archlinux Repositories Stuff'
+pkgdesc='Seblu Arch Linux Repositories Tools'
 arch=('any')
-url='https://github.com/seblu/archrepo'
+url='https://git.seblu.net/archlinux/archrepo'
 license=('GPL2')
 makedepends=('git')
 depends=('bash' 'devtools' 'hardlink')
