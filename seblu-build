@@ -18,7 +18,8 @@
 
 [[ ! -f PKGBUILD ]] && echo 'No PKGBUILD' && exit 1
 
-source /etc/makepkg.conf
+source /usr/share/devtools/makepkg-x86_64.conf
+[[ -r "$HOME/.makepkg.conf" ]]  && source "$HOME/.makepkg.conf"
 source PKGBUILD
 
 repo=${0##*/}

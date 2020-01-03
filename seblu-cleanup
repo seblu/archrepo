@@ -16,13 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-db='seblu.db.tar.gz'
-repo='/home/archlinux/repo/seblu'
-arch=('x86_64')
-
-# source makepkg config
-. /etc/makepkg.conf
-
 cleanup() {
 	[[ -e $dir_file ]] && rm -f "$dir_file"
 	[[ -e $db_file ]] && rm -f "$db_file"
@@ -30,6 +23,10 @@ cleanup() {
 
 # remove temp file on exit
 trap cleanup 0
+
+db='seblu.db.tar.gz'
+repo='/home/archlinux/repo/seblu'
+arch=('x86_64')
 
 # create temporary files for computes diff
 dir_file=$(mktemp ${0##*/}.XXXXX)
@@ -39,7 +36,7 @@ db_file=$(mktemp ${0##*/}.XXXXX)
 for arch in "${arch[@]}"; do
 	[[ -t 1 ]] && echo ":: Cleaning $repo/$arch"
 	# list files in directory
-	find "$repo/$arch" -type f -name "*${PKGEXT}" -printf '%f\n'|sort > "$dir_file"
+	find "$repo/$arch" -type f -regex '.*\.pkg\.tar\.\(xz\|zst\)' -printf '%f\n'|sort > "$dir_file"
 	# list files in database
 	bsdtar -xOf "$repo/$arch/$db" | awk '/^%FILENAME%/{getline;print}'|sort > "$db_file"
 	# compute file not in db

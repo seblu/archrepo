@@ -23,9 +23,6 @@ repo_64="$repo/x86_64"
 # packages to add
 declare -a to_32 to_64
 
-[[ -r /etc/makepkg.conf ]] && source /etc/makepkg.conf
-[[ -r "$HOME/.makepkg.conf" ]]  && source "$HOME/.makepkg.conf"
-
 shopt -s nullglob
 
 if [[ -t 0 && -t 2 ]]; then
@@ -111,10 +108,7 @@ shift $((OPTIND - 1));
 (( $# >= 1 )) || usage
 
 for _pkg; do
-	case "$_pkg" in
-		*-x86_64$PKGEXT) to_64+=("$_pkg");;
-		*-any$PKGEXT) to_64+=("$_pkg");;
-	esac
+	[[ "$_pkg" =~ .*\.pkg\.tar\.(xz|zst) ]] && to_64+=("$_pkg")
 done
 
 if (( ${#to_32[@]} + ${#to_64[@]} == 0 )); then

@@ -8,3 +8,5 @@ TODO
 test
 tags
 *.pkg.tar.xz
+*.pkg.tar.zst
+*.pkg.tar.*.sig
