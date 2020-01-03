@@ -25,5 +25,3 @@ commitpkg:
   only:
     refs:
       - master
-    changes:
-      - PKGBUILD
