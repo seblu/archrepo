@@ -12,7 +12,7 @@ depends=('bash' 'devtools' 'hardlink')
 
 pkgver() {
   cd "$startdir"
-  git rev-list --count HEAD
+  printf '%s.%(%y%m%d%H%M)T' "$(git rev-list --count HEAD)"
 }
 
 package() {
