@@ -1,14 +1,19 @@
 # Maintainer: Sébastien Luttringer
 
 pkgname=archrepo-git
-pkgver=$(git rev-list --count master)
-pkgrel=$(date +%y%m%d%H%M)
+pkgver=1
+pkgrel=1
 pkgdesc='Seblu Arch Linux Repositories Tools'
 arch=('any')
 url='https://git.seblu.net/archlinux/archrepo'
 license=('GPL2')
 makedepends=('git')
 depends=('bash' 'devtools' 'hardlink')
+
+pkgver() {
+  cd "$startdir"
+  git rev-list --count HEAD
+}
 
 package() {
   cd "$startdir"
