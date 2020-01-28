@@ -39,27 +39,6 @@ msg2() {
 	printf "$BLUE  ->$BOLD $1$RESET\n" "${@:1}"
 }
 
-source_pkgbuild() {
-	[[ ! -f PKGBUILD ]] && echo 'No PKGBUILD' && exit 1
-	source /usr/share/devtools/makepkg-x86_64.conf
-	[[ -r "$HOME/.makepkg.conf" ]]  && source "$HOME/.makepkg.conf"
-	source PKGBUILD
-
-	[[ $(type -t pkgver) == 'function' ]] && pkgver=$(pkgver)
-
-	for _pkgname in "${pkgname[@]}"; do
-		# define filename base
-		# handle epoch which is optional
-		filebase="$_pkgname-"
-		[[ -n $epoch ]] && (( $epoch > 0 )) && filebase+="$epoch:"
-		filebase+="$pkgver-$pkgrel"
-
-		for _arch in "${arch[@]}"; do
-			filename="$filebase-$_arch$PKGEXT"
-			[[ -f "$filename" ]] && to_commit+=("$filename")
-		done
-	done
-}
 
 # push package to remote repository
 push_pkg() {
@@ -72,16 +51,12 @@ push_pkg() {
 	done
 }
 
-# if packages are on command line add them, otherwise look in PKGBUILD
+# push packages on command line, otherwise all packages in the current directory
 if (( $# > 0 )); then
 	for _pkg; do
 		[[ "$_pkg" =~ .*\.pkg\.tar\.(xz|zst) ]] && to_commit+=("$_pkg")
 	done
 else
-	# try to find those in a PKGBUILD file
-	source_pkgbuild
-
-	# when no package found, push all packages in the current directory
 	if (( ${#to_commit[@]} == 0 )); then
 		to_commit=(*\.pkg\.tar\.{xz,zst})
 	fi
