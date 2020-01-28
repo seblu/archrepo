@@ -39,18 +39,6 @@ msg2() {
 	printf "$BLUE  ->$BOLD $1$RESET\n" "${@:1}"
 }
 
-# usage : in_array( $needle, $haystack )
-# return : 0 - found
-#          1 - not found
-in_array() {
-	local needle=$1; shift
-	local item
-	for item in "$@"; do
-	   [[ $item = $needle ]] && return 0 # Found
-	done
-	return 1 # Not Found
-}
-
 source_pkgbuild() {
 	[[ ! -f PKGBUILD ]] && echo 'No PKGBUILD' && exit 1
 	source /usr/share/devtools/makepkg-x86_64.conf
