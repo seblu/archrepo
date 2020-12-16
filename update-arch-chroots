@@ -21,7 +21,7 @@
 [[ -t 1 ]] && set -x
 
 tmpdir="$(mktemp -d)"
-trap 0 rm -rf "$tmpdir"
+trap 'rm -rf "$tmpdir"' 0
 
 cd "$tmpdir"
 
